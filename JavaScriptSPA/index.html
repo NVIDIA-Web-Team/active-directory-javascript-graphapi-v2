@@ -6,7 +6,7 @@
     <title>JavaScript SPA Guided Setup</title>
 </head>
 <body style="margin: 40px">
-    <button id="callGraphButton" type="button" class="btn btn-primary" onclick="callGraphApi()">Call Microsoft Graph API</button>
+    <button id="callGraphButton" type="button" class="btn btn-primary" onclick="">Call Microsoft Graph API</button>
     <div id="errorMessage" class="text-danger"></div>
     <div class="hidden">
         <h3>Graph API Call Response</h3>
@@ -20,11 +20,11 @@
         <h3>ID Token Claims</h3>
         <pre class="well" id="userInfo"></pre>
     </div>
-    <button id="signOutButton" type="button" class="btn btn-primary hidden" onclick="signOut()">Sign out</button>
+    <button id="signOutButton" type="button" class="btn btn-primary hidden" onclick="">Sign out</button>
 
-    <!-- This app uses cdn to reference msal.js (recommended). 
-         You can also download it from: https://github.com/AzureAD/microsoft-authentication-library-for-js -->
-    <script src="https://secure.aadcdn.microsoftonline-p.com/lib/0.1.3/js/msal.min.js"></script>
+    <!-- This app uses cdn to reference msal.js (recommended). You can also download it from: https://github.com/AzureAD/microsoft-authentication-library-for-js -->
+    <!-- Add MSAL.js CDN reference here -->
+
     <!--<script type="text/javascript" src="msal.js"></script>-->
     <script type="text/javascript" src="msalconfig.js"></script>
 

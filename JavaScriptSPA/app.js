@@ -5,9 +5,7 @@ var graphApiEndpoint = "https://graph.microsoft.com/v1.0/me";
 var graphAPIScopes = ["https://graph.microsoft.com/user.read"];
 
 // Initialize application
-var userAgentApplication = new Msal.UserAgentApplication(msalconfig.clientID, null, loginCallback, {
-    redirectUri: msalconfig.redirectUri
-});
+
 
 //Previous version of msal uses redirect url via a property
 if (userAgentApplication.redirectUri) {
@@ -29,51 +27,7 @@ window.onload = function () {
  * Call the Microsoft Graph API and display the results on the page
  */
 function callGraphApi() {
-    var user = userAgentApplication.getUser();
-    if (!user) {
-        // If user is not signed in, then prompt user to sign in via loginRedirect.
-        // This will redirect user to the Azure Active Directory v2 Endpoint
-        userAgentApplication.loginRedirect(graphAPIScopes);
 
-        // The call to loginRedirect above frontloads the consent to query Graph API during the sign-in.
-        // If you want to use dynamic consent, just remove the graphAPIScopes from loginRedirect call:
-        // As such, user will be prompted to give consent as soon as the token for a resource that 
-        // he/she hasn't consented before is requested. In the case of this application - 
-        // the first time the Graph API call to obtain user's profile is executed.
-    } else {
-
-        // If user is already signed in, display the user info
-        var userInfoElement = document.getElementById("userInfo");
-        userInfoElement.parentElement.classList.remove("hidden");
-        userInfoElement.innerHTML = JSON.stringify(user, null, 4);
-
-        // Show Sign-Out button
-        document.getElementById("signOutButton").classList.remove("hidden");
-
-        // Now Call Graph API to show the user profile information:
-        var graphCallResponseElement = document.getElementById("graphResponse");
-        graphCallResponseElement.parentElement.classList.remove("hidden");
-        graphCallResponseElement.innerText = "Calling Graph ...";
-
-        // In order to call the Graph API, an access token needs to be acquired.
-        // Try to acquire the token used to Query Graph API silently first
-        userAgentApplication.acquireTokenSilent(graphAPIScopes)
-            .then(function (token) {
-                //After the access token is acquired, call the Web API, sending the acquired token
-                callWebApiWithToken(graphApiEndpoint, token, graphCallResponseElement, document.getElementById("accessToken"));
-
-            }, function (error) {
-                // If the acquireTokenSilent() method fails, then acquire the token interactively via acquireTokenRedirect().
-                // In this case, the browser will redirect user back to the Azure Active Directory v2 Endpoint so the user 
-                // can re-type the current username and password and/ or give consent to new permissions your application is requesting.
-                // After authentication/ authorization completes, this page will be reloaded again and callGraphApi() will be called.
-                // Then, acquireTokenSilent will then acquire the token silently, the Graph API call results will be made and results will be displayed in the page.
-                if (error) {
-                    userAgentApplication.acquireTokenRedirect(graphAPIScopes);
-                }
-            });
-
-    }
 }
 
 /**
@@ -95,20 +49,16 @@ function showError(endpoint, error, errorDesc) {
  * Callback method from sign-in: if no errors, call callGraphApi() to show results.
  * @param {string} errorDesc - If error occur, the error message
  * @param {object} token - The token received from login
- * @param {object} error - The error 
+ * @param {object} error - The error
  * @param {string} tokenType - The token type: For loginRedirect, tokenType = "id_token". For acquireTokenRedirect, tokenType:"access_token"
  */
 function loginCallback(errorDesc, token, error, tokenType) {
-    if (errorDesc) {
-        showError(msal.authority, error, errorDesc);
-    } else {
-        callGraphApi();
-    }
+
 }
 
 /**
  * Call a Web API using an access token.
- * 
+ *
  * @param {any} endpoint - Web API endpoint
  * @param {any} token - Access token
  * @param {object} responseElement - HTML element used to display the results
@@ -161,5 +111,5 @@ function callWebApiWithToken(endpoint, token, responseElement, showTokenElement)
  * Sign-out the user
  */
 function signOut() {
-    userAgentApplication.logout();
+
 }
