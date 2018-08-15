@@ -20,9 +20,9 @@ app.use("/bower_components", express.static(path.join(__dirname, 'bower_componen
 
 // Set up our one route to the index.html file.
 app.get('*', function (req, res) {
-    res.sendFile(path.join(__dirname + '/index_LoginRedirect.html'));
+    res.sendFile(path.join(__dirname + '/JavaScriptSPA/index.html'));
 });
 
 // Start the server.
 app.listen(port);
-console.log('Listening on port ' + port + '...'); 
+console.log('Listening on port ' + port + '...');
